@@ -4,7 +4,7 @@ function Logo() {
   return (
     <div
     className="text-white font-extrabold"
-    >Zamps Client Business</div>
+    >Zamps Business Client</div>
   )
 }
 
