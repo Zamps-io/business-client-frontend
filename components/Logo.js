@@ -9,7 +9,7 @@ function Logo() {
       <Image src="/MikeLogo.png" height={50} width={50} />
       <h1
       className='ml-2 uppercase text-2xl'
-      >Mike's Shoes</h1>
+      >Mikes Shoes</h1>
     </div>
   )
 }
