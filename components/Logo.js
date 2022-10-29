@@ -6,7 +6,7 @@ function Logo() {
     <div
     className="text-white font-extrabold flex justify-center items-center"
     >
-      <Image src="/MikeLogo.png" height={50} width={50} />
+      <Image src="/clientlogo.png" height={50} width={50} />
       <h1
       className='ml-2 uppercase text-2xl'
       >Mikes Shoes</h1>

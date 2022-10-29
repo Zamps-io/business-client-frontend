@@ -4,15 +4,13 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Logo from '../components/Logo';
 import { ethers } from 'ethers';
+import { getETHPrice } from '../price-feed';
 
 export default function Home() {
 
   const [address, setAddress] = useState("");
-  const [nftId, setNftId] = useState("");
+  const [hasBusinessCard, setHasBusinessCard] = useState(false);
 
-  useEffect(() => {
-    
-  }, [address])
 
   const connectWallet = async () => {
     if(typeof window.ethereum !== 'undefined') {
@@ -23,8 +21,6 @@ export default function Home() {
 
     }
   }
-
-  //address
 
   const contractAddress = "0x889920F8EF1675f3d5d5E4e1C411CCd8D63695e1"
   //contract ABI
@@ -77,48 +73,56 @@ export default function Home() {
     }
   ]
 
-  
-
   const buyShoe = async () => {
+    const ETH = await getETHPrice();
+    const ETHPrice = 100 / ETH;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
 
-    const transaction = await contract.buyShoes({ value: ethers.utils.parseEther(".001")});
+    const transaction = await contract.buyShoes({ value: ethers.utils.parseEther(`${ETHPrice}`)});
     await transaction.wait();
   }
 
   const buyBennie = async () => {
+    const ETH = await getETHPrice();
+    const ETHPrice = 100 / ETH;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
 
-    const transaction = await contract.buyBennie({ value: ethers.utils.parseEther(".001")});
+    const transaction = await contract.buyBennie({ value: ethers.utils.parseEther(`${ETHPrice}`)});
     await transaction.wait();
   }
 
   const buyBag = async () => {
+    const ETH = await getETHPrice();
+    const ETHPrice = 100 / ETH;
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
 
-    const transaction = await contract.buyBag({ value: ethers.utils.parseEther(".001")});
+    const transaction = await contract.buyBag({ value: ethers.utils.parseEther(`${ETHPrice}`)});
     await transaction.wait();
   }
 
-  const getNftData = async () => {
+  const checkHasBusinessCard = async () => {
     
     if(!address) return;
 
-    const response = await fetch(`https://api.rarible.org/v0.1/items/byOwner?owner=ETHEREUM:0x4765273c477c2dc484da4f1984639e943adccfeb`)
-    
-    const data = await response.json();
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
 
-    console.log(data);
+    const response = await contract.balanceOf(address);
+
+    if(reponse > 0) {
+      setHasBusinessCard(true);
+    }
   }
 
   useEffect(() => {
-    getNftData();
+    checkHasBusinessCard();
   }, [address]);
 
   return (
